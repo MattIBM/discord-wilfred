@@ -33,6 +33,14 @@ Open the crate to see what's inside
             """
             shopEm = discord.Embed(description="List of Purchasable Items\n" +shop_string , color=colour.primary)
             shopEm.set_author(name="Shop")
+            shopEm.add_field(name="Event Items", value="""6) **Supreme Elf Rank** - __$10.00__
+Special Christmas Event Rank 
+Comes with 1.5x exp
+Expires January 7th 2021
+
+7) **Elf Tag** - __$5.00__
+Special Christmas Tag (Light Green) 
+Expires January 7th 2021""")
             shopEm.add_field(name="How to use the shop", value="You can obtain balance through being the most active each week, once you have enough balance to purchase an item on the shop, type !shop buy <item> <quantity>", inline=False)
             await ctx.send(embed=shopEm)
         else:
@@ -90,6 +98,26 @@ Open the crate to see what's inside
                             await ctx.send(embed=em)
                             crates_no = crates_no + 1*quantity
                             sql.execute_query("UPDATE Members SET crates = %s WHERE UserID = %s" % (str(crates_no), str(ctx.author.id)))
+                    else:
+                        await discord_error("Insufficent funds", ctx)
+                elif args[2] == "6":
+                    if bal >= 10.00:
+                        add_balance(ctx.author, -10.00)
+                        role = discord.utils.get(ctx.guild.roles, id=781987703130554368)
+                        await ctx.author.add_roles(role)
+                        em = discord.Embed(description="Your rank has been given", color=colour.primary)
+                        em.set_author(name="Purchase Successful")
+                        await ctx.send(embed=em)
+                    else:
+                        await discord_error("Insufficent funds", ctx)
+                elif args[2] == "7":
+                    if bal >= 5.00:
+                        add_balance(ctx.author, -5.00)
+                        role = discord.utils.get(ctx.guild.roles, id=781987610355957760)
+                        await ctx.author.add_roles(role)
+                        em = discord.Embed(description="Your tag has been given", color=colour.primary)
+                        em.set_author(name="Purchase Successful")
+                        await ctx.send(embed=em)
                     else:
                         await discord_error("Insufficent funds", ctx)
                 else:
